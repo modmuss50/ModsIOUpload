@@ -86,7 +86,7 @@ public class UploadTask extends AbstractTask {
                 tag
         );
 
-        logger.debug("Sending post with + " + data);
+        logger.info("Sending post with + " + data);
 
         post.addHeader("X-API-Key", apiKey);
         post.addHeader("Accept", "application/json");
