@@ -37,8 +37,6 @@ public class UploadTask extends AbstractTask {
     @Input
     public String changelog = "";
     @Input
-    public String version = "";
-    @Input
     public String tag = "release";
     @Input
     public String apiKey;
@@ -46,6 +44,8 @@ public class UploadTask extends AbstractTask {
     public String modId;
     @Input
     public String minecraft;
+    @Input
+    public boolean current = true;
 
     private SSLConnectionSocketFactory setupSSL() {
         SSLContextBuilder builder = new SSLContextBuilder();
@@ -78,17 +78,17 @@ public class UploadTask extends AbstractTask {
         HttpPost post = new HttpPost(String.format("https://mods.io/mods/%s/versions/create.json", modId));
 
         Artifact data = new Artifact(this.artifact.getName(),
-                version,
+                getProject().getVersion().toString(),
                 minecraft,
                 changelog,
-                tag
+                tag,
+                current
         );
 
         logger.lifecycle("Sending post with + " + data);
 
         post.addHeader("X-API-Key", apiKey);
         post.addHeader("Accept", "application/json");
-        post.addHeader("Content-Type", "multipart/form-data");
 
         HttpEntity entity = MultipartEntityBuilder.create()
                 .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
@@ -117,13 +117,14 @@ public class UploadTask extends AbstractTask {
     }
 
     private static class Artifact {
-        private Artifact(String filename, String name, String minecraft, String changelog, String tag) {
+        private Artifact(String filename, String name, String minecraft, String changelog, String tag, boolean current) {
             this.filename = filename;
             this.version = new Version();
             version.name = name;
             version.minecraft = minecraft;
             version.changelog = changelog;
             version.tag = tag;
+            this.current = current;
         }
 
         @Override
@@ -150,6 +151,7 @@ public class UploadTask extends AbstractTask {
 
         String filename;
         Version version;
+        boolean current;
 
 
     }
