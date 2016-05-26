@@ -14,6 +14,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.gradle.api.internal.AbstractTask;
+import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.TaskAction;
 
@@ -70,6 +71,9 @@ public class UploadTask extends AbstractTask {
     @TaskAction
     public void uploadToModsIO() {
 
+        Logger logger = getProject().getLogger();
+        logger.info("Uploading mod to mods.io");
+
         HttpClient client = HttpClientBuilder.create()
                 .setSSLSocketFactory(setupSSL())
                 .build();
@@ -81,6 +85,8 @@ public class UploadTask extends AbstractTask {
                 changelog,
                 tag
         );
+
+        logger.debug("Sending post with + " + data);
 
         post.addHeader("X-API-Key", apiKey);
         post.addHeader("Accept", "application/json");
@@ -101,7 +107,7 @@ public class UploadTask extends AbstractTask {
                 Map<String, List<String>> error = new HashMap<String, List<String>>();
                 //noinspection unchecked
                 error = (Map<String, List<String>>) new Gson().fromJson(EntityUtils.toString(ent), error.getClass());
-
+                logger.error(EntityUtils.toString(ent));
                 throw new RuntimeException(Arrays.toString(error.get("Errors").toArray()));
             }
         } catch (SSLHandshakeException ex) {
@@ -122,8 +128,26 @@ public class UploadTask extends AbstractTask {
             version.tag = tag;
         }
 
+        @Override
+        public String toString() {
+            return "Artifact{" +
+                    "filename='" + filename + '\'' +
+                    ", version=" + version +
+                    '}';
+        }
+
         public static class Version {
             String name, minecraft, changelog, tag;
+
+            @Override
+            public String toString() {
+                return "Version{" +
+                        "name='" + name + '\'' +
+                        ", minecraft='" + minecraft + '\'' +
+                        ", changelog='" + changelog + '\'' +
+                        ", tag='" + tag + '\'' +
+                        '}';
+            }
         }
 
         String filename;
