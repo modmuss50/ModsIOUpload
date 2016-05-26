@@ -54,7 +54,7 @@ uploadArchives {
                 repository(url: "file:///var/www/maven/")
             }
             pom {
-                groupId = group
+                groupId = "ModsIOUpload"
                 version = project.version
                 artifactId = project.archivesBaseName
                 project {
