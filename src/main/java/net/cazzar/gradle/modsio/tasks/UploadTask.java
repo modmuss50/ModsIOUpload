@@ -75,7 +75,7 @@ public class UploadTask extends AbstractTask {
                 .build();
         HttpPost post = new HttpPost(String.format("https://mods.io/mods/%s/versions/create.json", modId));
 
-        Artifact data = new Artifact((name == null || name.trim().isEmpty()) ? this.artifact.getName() : name,
+        Artifact data = new Artifact(this.artifact.getName(),
                 version,
                 minecraft,
                 changelog,
