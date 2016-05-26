@@ -25,7 +25,7 @@ The following is a basic example of use,
         }
     }
     apply plugin: 'net.minecraftforge.gradle.forge'
-    apply plugin: 'modsio'
+    apply plugin: 'net.cazzar.gradle.modsio'
 
 
     version = "Mod Version"
@@ -36,14 +36,17 @@ The following is a basic example of use,
 
     group = 'ModName'
 
-    uploadToModsIO {
-    	modId = "Project ID" //found in url of mod
-    	minecraft = "Minecraft Version"
-    	changelog = "ChangeLog text"
-    	tag = "alpha" this is the tag that is set
-    	apiKey = "Your API KEY" //this is your mods.io API key, find in settings
-    	artifact = jar.archivePath //this is the artifact to use. //TODO clean this
-    	current = true; //Should this file be the recommended file on mods.io
+    modsIO {
+        key = "Your API KEY" //this is your mods.io API key, find in settings
+
+        project {
+            artifact = jar.archivePath //this is the artifact to use. //TODO clean this
+            modid = "Project ID" //found in url of mod
+            minecraft = "Minecraft Version"
+            changelog = "ChangeLog text"
+            tag = "alpha" this is the tag that is set
+            current = true //Should this file be the recommended file on mods.io
+        }
     }
 ```
 
