@@ -12,6 +12,5 @@ public class ModsIOPlugin implements Plugin<Project> {
      */
     public void apply(Project target) {
         target.getTasks().create("uploadToModsIO", UploadTask.class);
-        target.getExtensions().add("modsio", new ModsIOExtension(target));
     }
 }

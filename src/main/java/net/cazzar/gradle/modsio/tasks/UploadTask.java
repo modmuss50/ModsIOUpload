@@ -1,7 +1,6 @@
 package net.cazzar.gradle.modsio.tasks;
 
 import com.google.gson.Gson;
-import net.cazzar.gradle.modsio.ModsIOExtension;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -42,6 +41,12 @@ public class UploadTask extends AbstractTask {
     public String tag = "release";
     @Input
     public String name;
+    @Input
+    public String apiKey;
+    @Input
+    public String modId;
+    @Input
+    public String minecraft;
 
     private SSLConnectionSocketFactory setupSSL() {
         SSLContextBuilder builder = new SSLContextBuilder();
@@ -64,21 +69,20 @@ public class UploadTask extends AbstractTask {
 
     @TaskAction
     public void uploadToModsIO() {
-        ModsIOExtension extension = (ModsIOExtension) this.getProject().getExtensions().getByName("modsio");
 
         HttpClient client = HttpClientBuilder.create()
                 .setSSLSocketFactory(setupSSL())
                 .build();
-        HttpPost post = new HttpPost(String.format("https://mods.io/mods/%s/versions/create.json", extension.getModId()));
+        HttpPost post = new HttpPost(String.format("https://mods.io/mods/%s/versions/create.json", modId));
 
         Artifact data = new Artifact((name == null || name.trim().isEmpty()) ? this.artifact.getName() : name,
                 version,
-                extension.minecraft,
+                minecraft,
                 changelog,
                 tag
         );
 
-        post.addHeader("X-API-Key", extension.getApiKey());
+        post.addHeader("X-API-Key", apiKey);
         post.addHeader("Accept", "application/json");
 
         HttpEntity entity = MultipartEntityBuilder.create()
