@@ -73,7 +73,7 @@ public class UploadTask extends AbstractTask {
 
         Artifact data = new Artifact((name == null || name.trim().isEmpty()) ? this.artifact.getName() : name,
                 version,
-                extension.getMinecraft(),
+                extension.minecraft,
                 changelog,
                 tag
         );
