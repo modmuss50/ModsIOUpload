@@ -41,8 +41,6 @@ public class UploadTask extends AbstractTask {
     @Input
     public String tag = "release";
     @Input
-    public String name;
-    @Input
     public String apiKey;
     @Input
     public String modId;
@@ -72,7 +70,7 @@ public class UploadTask extends AbstractTask {
     public void uploadToModsIO() {
 
         Logger logger = getProject().getLogger();
-        logger.info("Uploading mod to mods.io");
+        logger.lifecycle("Uploading mod to mods.io");
 
         HttpClient client = HttpClientBuilder.create()
                 .setSSLSocketFactory(setupSSL())
@@ -86,10 +84,11 @@ public class UploadTask extends AbstractTask {
                 tag
         );
 
-        logger.info("Sending post with + " + data);
+        logger.lifecycle("Sending post with + " + data);
 
         post.addHeader("X-API-Key", apiKey);
         post.addHeader("Accept", "application/json");
+        post.addHeader("Content-Type", "multipart/form-data");
 
         HttpEntity entity = MultipartEntityBuilder.create()
                 .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
