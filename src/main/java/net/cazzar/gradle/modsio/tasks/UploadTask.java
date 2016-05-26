@@ -70,7 +70,6 @@ public class UploadTask extends AbstractTask {
     public void uploadToModsIO() {
 
         Logger logger = getProject().getLogger();
-        logger.lifecycle("Uploading mod to mods.io");
 
         HttpClient client = HttpClientBuilder.create()
                 .setSSLSocketFactory(setupSSL())
@@ -85,7 +84,7 @@ public class UploadTask extends AbstractTask {
                 current
         );
 
-        logger.lifecycle("Sending post with + " + data);
+        logger.debug("Sending post with + " + data);
 
         post.addHeader("X-API-Key", apiKey);
         post.addHeader("Accept", "application/json");
@@ -132,6 +131,7 @@ public class UploadTask extends AbstractTask {
             return "Artifact{" +
                     "filename='" + filename + '\'' +
                     ", version=" + version +
+                    ", current=" + current +
                     '}';
         }
 
