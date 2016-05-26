@@ -107,7 +107,6 @@ public class UploadTask extends AbstractTask {
                 Map<String, List<String>> error = new HashMap<String, List<String>>();
                 //noinspection unchecked
                 error = (Map<String, List<String>>) new Gson().fromJson(EntityUtils.toString(ent), error.getClass());
-                logger.error(EntityUtils.toString(ent));
                 throw new RuntimeException(Arrays.toString(error.get("Errors").toArray()));
             }
         } catch (SSLHandshakeException ex) {
