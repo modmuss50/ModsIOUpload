@@ -20,7 +20,7 @@ apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 
 group = "net.cazzar"
-sourceCompatibility = 1.5
+sourceCompatibility = 1.8
 version = '1.0'
 
 repositories {
