@@ -17,34 +17,49 @@
 
 apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = "net.cazzar"
 sourceCompatibility = 1.8
-version = '1.0'
+version = '2.0'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
     compile gradleApi()
-//    compile localGroovy()
     compile 'org.apache.httpcomponents:httpmime:4.3.2'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'commons-lang:commons-lang:2.6'
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
+uploadArchives {
     repositories {
-        maven {
-            url "file://home/cayde/public_html/cazzar.net/maven"
+        mavenDeployer {
+            if (project.hasProperty('mavenPass'))
+            {
+                repository(url: "http://mavenupload.modmuss50.me/") {
+                    authentication(userName: "buildslave", password: project.getProperty('mavenPass'))
+                }
+            }
+            pom {
+                groupId = group
+                version = project.version
+                artifactId = project.archivesBaseName
+                project {
+                    name project.archivesBaseName
+                    packaging 'jar'
+                    developers {
+                        developer {
+                            id 'modmuss50'
+                            name 'modmuss50'
+                            roles { role 'developer' }
+                        }
+                    }
+                }
+            }
         }
     }
 }
